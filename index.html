@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Manifestation Journal · Badass Alchemy</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; min-height: 100%; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--bg);
+    color: var(--txt-sec);
+    transition: background .3s ease, color .3s ease;
+    line-height: 1.6;
+  }
+
+  /* Theme variables — Dark (default) */
+  :root {
+    --bg: #1F1320;
+    --bg-card: #2A1A2D;
+    --input-bg: #160C18;
+    --accent: #6E3865;
+    --accent-lt: #B57BAE;
+    --detail: #C99CC1;
+    --txt: #FAEFF4;
+    --txt-sec: #EDD8E5;
+    --txt-muted: #C9A8BE;
+    --txt-faded: #9B7090;
+    --moon-prl: #FAEFF4;
+    --border: rgba(181,123,174,0.18);
+    --border-mid: rgba(181,123,174,0.32);
+    --shadow: 0 4px 20px rgba(0,0,0,0.4);
+    --track: rgba(250,239,244,0.1);
+  }
+
+  [data-theme="light"] {
+    --bg: #FBF5F8;
+    --bg-card: #FFFFFF;
+    --input-bg: #FBF5F8;
+    --accent: #6E3865;
+    --accent-lt: #B57BAE;
+    --detail: #B57BAE;
+    --txt: #3A1E33;
+    --txt-sec: #5A2F4E;
+    --txt-muted: #7A4A6C;
+    --txt-faded: #A87A9A;
+    --moon-prl: #FFFFFF;
+    --border: rgba(110,56,101,0.12);
+    --border-mid: rgba(110,56,101,0.22);
+    --shadow: 0 4px 20px rgba(110,56,101,0.1);
+    --track: rgba(110,56,101,0.15);
+  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 3px; }
+
+  /* Top bar */
+  .topbar {
+    background: linear-gradient(135deg, #B57BAE 0%, #6E3865 100%);
+    padding: 0 24px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .brand-block { display: flex; align-items: center; gap: 14px; }
+  .brand-mark {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(255,255,255,0.4);
+    color: #3A1E33;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .brand-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: #FFFFFF;
+    line-height: 1;
+  }
+  .brand-sub {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    color: #3A1E33;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .theme-toggle {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.3);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 50px;
+    padding: 8px 16px;
+    cursor: pointer;
+    color: #3A1E33;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all .2s ease;
+  }
+  .theme-toggle:hover { background: rgba(255,255,255,0.4); }
+  .theme-toggle .icon { font-size: 14px; }
+
+  /* Container */
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* Hero */
+  .hero { text-align: center; margin-bottom: 44px; }
+  .hero .eyebrow {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    color: var(--accent-lt);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  [data-theme="light"] .hero .eyebrow { color: var(--accent); }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: clamp(32px, 5vw, 46px);
+    line-height: 1.1;
+    color: var(--txt);
+    margin-bottom: 18px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent-lt);
+  }
+  [data-theme="light"] .hero h1 em { color: var(--accent); }
+  .hero p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--txt-muted);
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  /* Video section */
+  .video-wrap {
+    margin-bottom: 56px;
+  }
+  .video-frame {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border-mid);
+    box-shadow: var(--shadow);
+  }
+  .video-frame iframe {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 0;
+  }
+  .video-caption {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent-lt);
+    text-transform: uppercase;
+  }
+  [data-theme="light"] .video-caption { color: var(--accent); }
+
+  /* Section header */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .section-header .icon { font-size: 18px; }
+  .section-header .label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    color: var(--accent-lt);
+    text-transform: uppercase;
+  }
+  [data-theme="light"] .section-header .label { color: var(--accent); }
+  .section-header .divider {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Journal card */
+  .journal-card {
+    background: var(--bg-card);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 28px 26px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+    transition: background .3s ease;
+  }
+  .prompt-number {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--accent-lt);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  [data-theme="light"] .prompt-number { color: var(--accent); }
+  .prompt {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-style: italic;
+    font-weight: 700;
+    color: var(--txt);
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+  .prompt-hint {
+    font-size: 13px;
+    color: var(--txt-faded);
+    margin-bottom: 14px;
+    font-style: italic;
+    line-height: 1.6;
+  }
+  textarea {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--txt-sec);
+    line-height: 1.75;
+    resize: vertical;
+    outline: none;
+    min-height: 130px;
+    transition: border .2s ease, background .3s ease;
+  }
+  textarea:focus { border-color: var(--accent-lt); }
+  textarea::placeholder { color: var(--txt-faded); font-style: italic; }
+
+  .save-indicator {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--txt-faded);
+    text-transform: uppercase;
+    margin-top: 10px;
+    opacity: 0;
+    transition: opacity .3s ease;
+  }
+  .save-indicator.visible { opacity: 1; }
+
+  /* Action bar */
+  .actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 40px;
+  }
+  .btn {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent-lt), var(--accent));
+    color: var(--moon-prl);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(110,56,101,0.4); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--txt);
+    border: 1px solid var(--border-mid);
+    padding: 13px 28px;
+  }
+  .btn-secondary:hover { border-color: var(--accent-lt); }
+
+  /* Closing message */
+  .closing {
+    text-align: center;
+    margin-top: 56px;
+    padding: 36px 28px;
+    background: linear-gradient(135deg, #B57BAE 0%, #6E3865 100%);
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  .closing .signoff {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-style: italic;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .closing .note {
+    font-size: 12px;
+    color: #3A1E33;
+    font-weight: 500;
+    line-height: 1.7;
+    max-width: 440px;
+    margin: 12px auto 0;
+  }
+
+  /* Quantum Queen section */
+  .quantum-section {
+    margin-top: 48px;
+    padding: 48px 36px;
+    background: var(--bg-card);
+    border-radius: 14px;
+    border: 1px solid var(--border-mid);
+    text-align: center;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .quantum-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(135deg, #B57BAE 0%, #6E3865 100%);
+  }
+  .quantum-eyebrow {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    color: var(--accent-lt);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  [data-theme="light"] .quantum-eyebrow { color: var(--accent); }
+  .quantum-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: clamp(30px, 4.5vw, 40px);
+    color: var(--txt);
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .quantum-title em {
+    font-style: italic;
+    background: linear-gradient(135deg, #B57BAE 0%, #6E3865 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--accent-lt);
+  }
+  .quantum-lede {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-style: italic;
+    color: var(--txt);
+    line-height: 1.5;
+    max-width: 520px;
+    margin: 0 auto 24px;
+  }
+  .quantum-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--border-mid);
+    margin: 0 auto 24px;
+  }
+  .quantum-body {
+    font-size: 14.5px;
+    color: var(--txt-muted);
+    line-height: 1.8;
+    max-width: 540px;
+    margin: 0 auto 32px;
+  }
+  .quantum-body em {
+    font-style: italic;
+    color: var(--accent-lt);
+    font-weight: 600;
+  }
+  [data-theme="light"] .quantum-body em { color: var(--accent); }
+  .btn-quantum {
+    display: inline-block;
+    text-decoration: none;
+    background: linear-gradient(135deg, #B57BAE 0%, #6E3865 100%);
+    color: #FFFFFF;
+    padding: 16px 36px;
+    border-radius: 50px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all .2s ease;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .btn-quantum:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(110,56,101,0.5);
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+  footer .tag {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--accent-lt);
+    margin-bottom: 8px;
+  }
+  [data-theme="light"] footer .tag { color: var(--accent); }
+  footer .meta {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--txt-faded);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Fade in */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in { animation: fadeIn .5s ease both; }
+  .fade-in.delay-1 { animation-delay: .1s; }
+  .fade-in.delay-2 { animation-delay: .2s; }
+  .fade-in.delay-3 { animation-delay: .3s; }
+
+  @media (max-width: 600px) {
+    main { padding: 32px 18px 60px; }
+    .topbar { padding: 0 16px; height: 60px; }
+    .brand-title { font-size: 16px; }
+    .brand-mark { width: 34px; height: 34px; }
+    .theme-toggle span:not(.icon) { display: none; }
+    .theme-toggle { padding: 8px 10px; }
+    .journal-card { padding: 22px 18px; }
+    .prompt { font-size: 19px; }
+    .hero h1 { font-size: 30px; }
+    .closing .signoff { font-size: 22px; }
+    .quantum-section { padding: 36px 22px; }
+    .quantum-title { font-size: 28px; }
+    .quantum-lede { font-size: 17px; }
+  }
+</style>
+</head>
+<body data-theme="dark">
+
+<header class="topbar">
+  <div class="brand-block">
+    <div class="brand-mark">✦</div>
+    <div>
+      <div class="brand-title">Badass Alchemy</div>
+      <div class="brand-sub">Baddie Society · Manifestation</div>
+    </div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+    <span class="icon" id="themeIcon">☾</span>
+    <span id="themeLabel">Dark</span>
+  </button>
+</header>
+
+<main>
+
+  <section class="hero fade-in">
+    <div class="eyebrow">✦ A Free Manifestation Practice</div>
+    <h1>Call it in, <em>Queen.</em></h1>
+    <p>Press play. Let the field open. Then move into the prompts below — this is where your future self gets written into reality.</p>
+  </section>
+
+  <section class="video-wrap fade-in delay-1">
+    <div class="video-frame">
+      <iframe
+        src="https://www.youtube.com/embed/h_tSGnRXQiw?rel=0"
+        title="Manifestation Video — Badass Alchemy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+    <div class="video-caption">✦ Watch first · then write</div>
+  </section>
+
+  <section class="fade-in delay-2">
+    <div class="section-header">
+      <span class="icon">🔮</span>
+      <span class="label">Journal Prompts</span>
+      <span class="divider"></span>
+    </div>
+
+    <div class="journal-card">
+      <div class="prompt-number">Prompt 01 · Permission</div>
+      <div class="prompt">Where in my life am I still asking for permission to exist as myself?</div>
+      <div class="prompt-hint">The Queen doesn't shrink to be understood. Name the rooms, relationships, or choices where you've been softening your truth — and what it would look like to stand fully in who you are.</div>
+      <textarea id="prompt1" placeholder="I've been asking for permission to..."></textarea>
+      <div class="save-indicator" id="saved1">✓ Saved</div>
+    </div>
+
+    <div class="journal-card">
+      <div class="prompt-number">Prompt 02 · The Becoming</div>
+      <div class="prompt">Who is the woman I am becoming — the one I respect?</div>
+      <div class="prompt-hint">Describe her in detail. How does she move? How does she speak? What does she allow herself to want, to receive, to expect? This is the identity you're stepping into.</div>
+      <textarea id="prompt2" placeholder="She is..."></textarea>
+      <div class="save-indicator" id="saved2">✓ Saved</div>
+    </div>
+
+    <div class="journal-card">
+      <div class="prompt-number">Prompt 03 · Receiving</div>
+      <div class="prompt">What am I ready to receive — without guilt, struggle, or proof?</div>
+      <div class="prompt-hint">Money. Love. Ease. Opportunity. Name it specifically. Then name what you're releasing to make room for it — the shame, the chase, the fear of wanting more.</div>
+      <textarea id="prompt3" placeholder="I am ready to receive..."></textarea>
+      <div class="save-indicator" id="saved3">✓ Saved</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="downloadBtn">⬇ Download My Entry</button>
+      <button class="btn btn-secondary" id="clearBtn">Start Fresh</button>
+    </div>
+  </section>
+
+  <section class="closing fade-in delay-3">
+    <div class="signoff">You are the alchemy.</div>
+    <div class="note">Come back to this practice as often as you need. The version of you you're calling in is already on her way. Keep writing her into existence.</div>
+  </section>
+
+  <section class="quantum-section fade-in delay-3">
+    <div class="quantum-eyebrow">✦ Dive Deeper</div>
+    <h2 class="quantum-title">The <em>Quantum Queen</em></h2>
+    <p class="quantum-lede">Learn how to get out of survival identity — and step into the woman who's already living the life you're calling in.</p>
+    <div class="quantum-divider"></div>
+    <p class="quantum-body">Manifestation isn't a vision board. It's an identity shift. Inside the masterclass, I walk you through the exact frequency, nervous system, and identity work that moves you from <em>wanting</em> her life to <em>being</em> her.</p>
+    <a href="#" class="btn btn-quantum" id="masterclassBtn">▶ Watch the Masterclass</a>
+  </section>
+
+  <footer>
+    <div class="tag">✦ Badass Alchemy</div>
+    <div class="meta">Baddie Society · Danielle Pettee</div>
+  </footer>
+
+</main>
+
+<script>
+  // Theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+  const themeLabel = document.getElementById('themeLabel');
+  const body = document.body;
+
+  function applyTheme(mode) {
+    body.setAttribute('data-theme', mode);
+    themeIcon.textContent = mode === 'dark' ? '☾' : '☀';
+    themeLabel.textContent = mode === 'dark' ? 'Dark' : 'Light';
+    try { localStorage.setItem('ba-manifestation-theme', mode); } catch(e) {}
+  }
+
+  // Load saved theme
+  try {
+    const saved = localStorage.getItem('ba-manifestation-theme');
+    if (saved === 'light' || saved === 'dark') applyTheme(saved);
+  } catch(e) {}
+
+  themeToggle.addEventListener('click', () => {
+    const current = body.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+
+  // Journal auto-save
+  const prompts = [
+    { id: 'prompt1', saveKey: 'ba-manifest-p1', indicator: 'saved1' },
+    { id: 'prompt2', saveKey: 'ba-manifest-p2', indicator: 'saved2' },
+    { id: 'prompt3', saveKey: 'ba-manifest-p3', indicator: 'saved3' },
+  ];
+
+  prompts.forEach(p => {
+    const ta = document.getElementById(p.id);
+    const ind = document.getElementById(p.indicator);
+
+    // Load
+    try {
+      const saved = localStorage.getItem(p.saveKey);
+      if (saved) ta.value = saved;
+    } catch(e) {}
+
+    // Save with debounce
+    let timeout;
+    ta.addEventListener('input', () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        try {
+          localStorage.setItem(p.saveKey, ta.value);
+          ind.classList.add('visible');
+          setTimeout(() => ind.classList.remove('visible'), 1800);
+        } catch(e) {}
+      }, 400);
+    });
+  });
+
+  // Download as text
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    const p1 = document.getElementById('prompt1').value.trim();
+    const p2 = document.getElementById('prompt2').value.trim();
+    const p3 = document.getElementById('prompt3').value.trim();
+
+    const date = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    const content = `✦ BADASS ALCHEMY · MANIFESTATION JOURNAL
+${date}
+
+═══════════════════════════════════════
+01 · PERMISSION
+Where in my life am I still asking for permission to exist as myself?
+═══════════════════════════════════════
+
+${p1 || '(empty)'}
+
+
+═══════════════════════════════════════
+02 · THE BECOMING
+Who is the woman I am becoming — the one I respect?
+═══════════════════════════════════════
+
+${p2 || '(empty)'}
+
+
+═══════════════════════════════════════
+03 · RECEIVING
+What am I ready to receive — without guilt, struggle, or proof?
+═══════════════════════════════════════
+
+${p3 || '(empty)'}
+
+
+═══════════════════════════════════════
+You are the alchemy.
+— Badass Alchemy · Baddie Society
+`;
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `manifestation-journal-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  // Clear
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    if (confirm('Clear all three entries and start fresh? This cannot be undone.')) {
+      prompts.forEach(p => {
+        document.getElementById(p.id).value = '';
+        try { localStorage.removeItem(p.saveKey); } catch(e) {}
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
